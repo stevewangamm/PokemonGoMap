@@ -1,0 +1,7 @@
+/packages
+/PokemonGoMap/obj
+/.vs
+/PokemonGoMap/bin/Release
+/PokemonGoMap/bin/Debug
+/PokemonGoMap/bin/Data
+/PokemonGoMap/bin/SimpleFileServer.exe

@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+	<meta charset="utf-8">
+	<title>PokéNests (Hong Kong)</title>
+	<meta property="og:title" content="PokéNests (Hong Kong)" />
+	<meta property="og:description" content="">
+	<meta property="og:type" content="article" />
+	<meta property="og:url" content="https://rawgit.com/tommyinb/PokemonGoMap/master/PokemonGoMap/bin/index.html" />
+	<meta property="og:image" content="https://rawgit.com/tommyinb/PokemonGoMap/master/PokemonGoMap/bin/preview.png" />
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+	<style>
+		html, body {
+			height: 100%;
+			margin: 0;
+			padding: 0;
+			font-family: 'Open Sans', sans-serif;
+		}
+		h1 {
+			position: absolute;
+			width: 100%;
+			z-index: 3;
+			text-align: center;
+			background: rgba(255, 255, 255, .3);
+			margin: 0;
+			padding: .5em 0 .5em 0;
+		}
+		#map {
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			z-index: 1;
+		}
+		#id {
+			position: absolute;
+			max-width: 20%;
+			max-height: 60%;
+			overflow-y: scroll;
+			scroll: hidden;
+			right: 0;
+			top: 15%;
+			background: rgba(255, 255, 255, .5);
+			z-index: 2;
+		}
+		#id div {
+			padding: .2em 1em .2em .5em;
+			cursor: default;
+			font-size: .9em;
+			margin: .1em;
+			border-radius: .7em;
+		}
+		#id div.on {
+			background: white;
+		}
+		#footer {
+			position: absolute;
+			width: 100%;
+			bottom: 0;
+			z-index: 3;
+			text-align: center;
+			margin: 0;
+			padding: .5em 0 .5em 0;
+			font-size: .5em;
+		}
+	</style>
+</head>
+<body>
+<h1>PokéNests (Hong Kong)</h1>
+<div id="map"></div>
+<div id="id">
+	<div>001 Bulbasaur</div>
+	<div>002 Ivysaur</div>
+	<div>003 Venusaur</div>
+	<div>004 Charmander</div>
+	<div>005 Charmeleon</div>
+	<div>006 Charizard</div>
+	<div>007 Squirtle</div>
+	<div>008 Wartortle</div>
+	<div>009 Blastoise</div>
+	<div>010 Caterpie</div>
+	<div>011 Metapod</div>
+	<div>012 Butterfree</div>
+	<div>013 Weedle</div>
+	<div>014 Kakuna</div>
+	<div>015 Beedrill</div>
+	<div>016 Pidgey</div>
+	<div>017 Pidgeotto</div>
+	<div>018 Pidgeot</div>
+	<div>019 Rattata</div>
+	<div>020 Raticate</div>
+	<div>021 Spearow</div>
+	<div>022 Fearow</div>
+	<div>023 Ekans</div>
+	<div>024 Arbok</div>
+	<div>025 Pikachu</div>
+	<div>026 Raichu</div>
+	<div>027 Sandshrew</div>
+	<div>028 Sandslash</div>
+	<div>029 Nidoran♀</div>
+	<div>030 Nidorina</div>
+	<div>031 Nidoqueen</div>
+	<div>032 Nidoran♂</div>
+	<div>033 Nidorino</div>
+	<div>034 Nidoking</div>
+	<div>035 Clefairy</div>
+	<div>036 Clefable</div>
+	<div>037 Vulpix</div>
+	<div>038 Ninetales</div>
+	<div>039 Jigglypuff</div>
+	<div>040 Wigglytuff</div>
+	<div>041 Zubat</div>
+	<div>042 Golbat</div>
+	<div>043 Oddish</div>
+	<div>044 Gloom</div>
+	<div>045 Vileplume</div>
+	<div>046 Paras</div>
+	<div>047 Parasect</div>
+	<div>048 Venonat</div>
+	<div>049 Venomoth</div>
+	<div>050 Diglett</div>
+	<div>051 Dugtrio</div>
+	<div>052 Meowth</div>
+	<div>053 Persian</div>
+	<div>054 Psyduck</div>
+	<div>055 Golduck</div>
+	<div>056 Mankey</div>
+	<div>057 Primeape</div>
+	<div>058 Growlithe</div>
+	<div>059 Arcanine</div>
+	<div>060 Poliwag</div>
+	<div>061 Poliwhirl</div>
+	<div>062 Poliwrath</div>
+	<div>063 Abra</div>
+	<div>064 Kadabra</div>
+	<div>065 Alakazam</div>
+	<div>066 Machop</div>
+	<div>067 Machoke</div>
+	<div>068 Machamp</div>
+	<div>069 Bellsprout</div>
+	<div>070 Weepinbell</div>
+	<div>071 Victreebel</div>
+	<div>072 Tentacool</div>
+	<div>073 Tentacruel</div>
+	<div>074 Geodude</div>
+	<div>075 Graveler</div>
+	<div>076 Golem</div>
+	<div>077 Ponyta</div>
+	<div>078 Rapidash</div>
+	<div>079 Slowpoke</div>
+	<div>080 Slowbro</div>
+	<div>081 Magnemite</div>
+	<div>082 Magneton</div>
+	<div>083 Farfetch'd</div>
+	<div>084 Doduo</div>
+	<div>085 Dodrio</div>
+	<div>086 Seel</div>
+	<div>087 Dewgong</div>
+	<div>088 Grimer</div>
+	<div>089 Muk</div>
+	<div>090 Shellder</div>
+	<div>091 Cloyster</div>
+	<div>092 Gastly</div>
+	<div>093 Haunter</div>
+	<div>094 Gengar</div>
+	<div>095 Onix</div>
+	<div>096 Drowzee</div>
+	<div>097 Hypno</div>
+	<div>098 Krabby</div>
+	<div>099 Kingler</div>
+	<div>100 Voltorb</div>
+	<div>101 Electrode</div>
+	<div>102 Exeggcute</div>
+	<div>103 Exeggutor</div>
+	<div>104 Cubone</div>
+	<div>105 Marowak</div>
+	<div>106 Hitmonlee</div>
+	<div>107 Hitmonchan</div>
+	<div>108 Lickitung</div>
+	<div>109 Koffing</div>
+	<div>110 Weezing</div>
+	<div>111 Rhyhorn</div>
+	<div>112 Rhydon</div>
+	<div>113 Chansey</div>
+	<div>114 Tangela</div>
+	<div>115 Kangaskhan</div>
+	<div>116 Horsea</div>
+	<div>117 Seadra</div>
+	<div>118 Goldeen</div>
+	<div>119 Seaking</div>
+	<div>120 Staryu</div>
+	<div>121 Starmie</div>
+	<div>122 Mr. Mime</div>
+	<div>123 Scyther</div>
+	<div>124 Jynx</div>
+	<div>125 Electabuzz</div>
+	<div>126 Magmar</div>
+	<div>127 Pinsir</div>
+	<div>128 Tauros</div>
+	<div>129 Magikarp</div>
+	<div>130 Gyarados</div>
+	<div>131 Lapras</div>
+	<div>132 Ditto</div>
+	<div>133 Eevee</div>
+	<div>134 Vaporeon</div>
+	<div>135 Jolteon</div>
+	<div>136 Flareon</div>
+	<div>137 Porygon</div>
+	<div>138 Omanyte</div>
+	<div>139 Omastar</div>
+	<div>140 Kabuto</div>
+	<div>141 Kabutops</div>
+	<div>142 Aerodactyl</div>
+	<div>143 Snorlax</div>
+	<div>144 Articuno</div>
+	<div>145 Zapdos</div>
+	<div>146 Moltres</div>
+	<div class="on">147 Dratini</div>
+	<div class="on">148 Dragonair</div>
+	<div class="on">149 Dragonite</div>
+	<div>150 Mewtwo</div>
+	<div>151 Mew</div>
+</div>
+<div id="footer">
+	Contribute and Expand the Map to Your Area! <a href="https://github.com/tommyinb/PokemonGoMap">tommyinb@github</a><br/>
+	Pokemon Nests in Last 24 Hours: 
+</div>
+<script src="https://code.jquery.com/jquery-3.1.0.js" integrity="sha256-slogkvB1K3VOkzAI8QITxV3VzpOnkeNVsKvtkYLMjfk=" crossorigin="anonymous"></script>
+<script>
+	var map = null;
+	function initMap() {
+		map = new google.maps.Map($('#map')[0], {
+			zoom: 12,
+			center: { lat: 22.3549725, lng: 114.172396 }
+		});
+		display();
+	}
+	
+	$('#id div').click(function () {
+		$(this).toggleClass('on');
+		if (map == null) return;
+		display();
+	});
+	$('#id').animate({
+        scrollTop: $('#id div.on').offset().top
+    }, 50);
+
+	var monstersPoints = { };
+	function display() {
+		$('#id div').each(function (index, element) {
+			var id = parseInt($(element).text());
+			var monsterPoints = monstersPoints[id];
+			if (monsterPoints == 'loading') return;
+			
+			if ($(element).hasClass('on')) {
+				if (monsterPoints == undefined) {
+					monstersPoints[id] = 'loading';
+					$.get('Result/' + id + '.json', function (data) {
+						monstersPoints[id] = data.map(function (t) {
+							var marker = new google.maps.Marker({
+								position: { lat: t.a, lng: t.o },
+								icon: 'https://skipcdn.net/img/pokemon/small/' + id + '.png',
+								map: map
+							});
+							
+							var info = null;
+							marker.addListener('click', function() {
+								if (info == null) {
+									var distanceTimes = data.map(function (s) {
+										var latitudeDistance = 110.574 * 1000 * (t.a - s.a);
+										var longitudeDistance = 111.320 * 1000 * Math.cos(t.a / 360) * (t.o - s.o);
+										var distance = Math.sqrt(latitudeDistance * latitudeDistance + longitudeDistance * longitudeDistance);
+										return { distance: distance, time: s.t };
+									});
+									
+									var within5m = distanceTimes.filter(function (s) { return s.distance <= 5; });
+									var within200m = distanceTimes.filter(function (s) { return s.distance <= 200 && s.distance > 5; });
+									var within800m = distanceTimes.filter(function (s) { return s.distance <= 800 && s.distance > 200; });
+									info = new google.maps.InfoWindow({
+										content: within5m.map(function (s) { return new Date(s.time * 1000).toLocaleString(); }).join('<br>')
+											+ (within5m.length + within200m.length + within800m.length > 1 ? '<br><br>' : '')
+											+ (within5m.length > 1 ? 'Frequency: ' + within5m.length + '<br>' : '')
+											+ (within200m.length > 0 ? '200m: ' + within200m.length + ' more<br>' : '')
+											+ (within800m.length > 0 ? '800m: ' + within800m.length + ' more' : '')
+									});
+								}
+							
+								info.open(map, marker);
+							});
+							
+							return marker;
+						});
+						display();
+					});
+				} else {
+					for (var i = 0; i < monsterPoints.length; i++) {
+						var monsterPoint = monsterPoints[i];
+						monsterPoint.setVisible(true);
+					}
+				}
+			} else {
+				if (monsterPoints != undefined) {
+					for (var i = 0; i < monsterPoints.length; i++) {
+						var monsterPoint = monsterPoints[i];
+						monsterPoint.setVisible(false);
+					}
+				}
+			}
+		});
+	}
+	
+	$.get('Result/result.json', function (data) {
+		$('#id div').each(function (index, element) {
+			var id = parseInt($(element).text());
+			var count = data.m[id] || 0;
+			$(element).text($(element).text() + ' (' + count + ')');
+		});
+		
+		var footer = $('#footer');
+		footer.html(footer.html() + new Date(data.t).toLocaleString());
+	});
+</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA8j8oxxqbnNBIWfj5tkjTUjNKCUl9Lz8M&callback=initMap"></script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-81780105-1', 'auto');
+  ga('send', 'pageview');
+</script>
+</body>
+</html>
