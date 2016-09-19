@@ -162,7 +162,11 @@ namespace PokemonGoMap
                     {
                         Debug.WriteLine(ex);
                     }
+#if DEBUG
+                    Thread.Sleep(1000);
+#else
                     Thread.Sleep(new TimeSpan(0, random.Next(1, 5), 0));
+#endif
                 }
                 //Console.WriteLine(db.Xdws.Count());
                 db.SaveChanges();

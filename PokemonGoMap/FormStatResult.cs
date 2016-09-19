@@ -47,7 +47,7 @@ namespace PokemonGoMap
 
         private void button1_Click(object sender, EventArgs e)
         {
-            var img = Image.FromFile(@"C:\Users\ZhiYong\Documents\Visual Studio 2015\Projects\VS2015Test\PokemonGoMap\P.ico");
+            var img = Image.FromFile(@"..\..\P.ico");
             var gpMarker = new GMapMarkerImage(new PointLatLng(1.323911f, 103.663055f), img );
 
             objects.Markers.Add(gpMarker);
