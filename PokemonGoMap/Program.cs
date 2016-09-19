@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -14,13 +15,14 @@ namespace PokemonGoMap
         [STAThread]
         static void Main()
         {
-            //Application.EnableVisualStyles();
-            //Application.SetCompatibleTextRenderingDefault(false);
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
             //Application.Run(new FormStatResult());
             //Application.Run(new Form1());
+            Application.Run(new SelectForm());
 
             //DownloadData.Run();
-            DownloadData.StoreStat();
+            //DownloadData.StoreStat();
             //CreateReport.Run();
             //CommitReport.Run();
         }
