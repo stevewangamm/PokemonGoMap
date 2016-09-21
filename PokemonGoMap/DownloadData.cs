@@ -14,6 +14,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using GMap.NET;
 
 namespace PokemonGoMap
 {
@@ -29,6 +30,11 @@ namespace PokemonGoMap
         public string XdwName { get; set; }
         public string XdwLat { get; set; }
         public string XdwLon { get; set; }
+
+        public override string ToString()
+        {
+            return XdwId + ", " + XdwName + ", " + XdwLat + ", " + XdwLon;
+        }
     }
 
     class DownloadData
@@ -144,32 +150,87 @@ namespace PokemonGoMap
 
         public static void StoreStat()
         {
-            using (var db = new XdwContext())
+            while (true)
             {
-                db.Database.CreateIfNotExists();
-                while (DateTime.Now.Hour < 17)
+                try
                 {
-                    try
+                    using (var db = new XdwContext())
                     {
+                        db.Database.CreateIfNotExists();
+
                         var xdws = GetXdws().ToList();
                         db.Xdws.AddRange(xdws);
                         var loginfo = string.Format("{0}    {1} recorded", DateTime.Now, xdws.Count);
                         Log(loginfo);
                         Console.Clear();
                         Console.WriteLine(loginfo);
+
+                        db.SaveChanges();
                     }
-                    catch (Exception ex)
-                    {
-                        Debug.WriteLine(ex);
-                    }
-#if DEBUG
-                    Thread.Sleep(1000);
-#else
-                    Thread.Sleep(new TimeSpan(0, random.Next(1, 5), 0));
-#endif
                 }
-                //Console.WriteLine(db.Xdws.Count());
-                db.SaveChanges();
+                catch (Exception ex)
+                {
+                    Log(ex.ToString());
+                }
+                Thread.Sleep(new TimeSpan(0, random.Next(1, 5), 0));
+            }
+            //            using (var db = new XdwContext())
+            //            {
+            //                db.Database.CreateIfNotExists();
+            //                while (DateTime.Now.Hour < 17)
+            //                {
+            //                    try
+            //                    {
+            //                        var xdws = GetXdws().ToList();
+            //                        db.Xdws.AddRange(xdws);
+            //                        var loginfo = string.Format("{0}    {1} recorded", DateTime.Now, xdws.Count);
+            //                        Log(loginfo);
+            //                        Console.Clear();
+            //                        Console.WriteLine(loginfo);
+            //                    }
+            //                    catch (Exception ex)
+            //                    {
+            //                        Debug.WriteLine(ex);
+            //                    }
+            //#if DEBUG
+            //                    Thread.Sleep(1000);
+            //#else
+            //                    Thread.Sleep(new TimeSpan(0, random.Next(1, 5), 0));
+            //#endif
+            //                }
+            //                //Console.WriteLine(db.Xdws.Count());
+            //                db.SaveChanges();
+            //            }
+        }
+
+        public static void ShowStat()
+        {
+            using (var db = new XdwContext())
+            {
+                db.Database.CreateIfNotExists();
+
+                db.Xdws.GroupBy(xdw => xdw.XdwName).ToList().ForEach(x =>
+                {
+                    Trace.WriteLine(string.Format("ID: {0}, Name: {1}, Count: {2}", x.Key, x.First().XdwName, x.Count()));
+                });
+                //db.SaveChanges();
+            }
+        }
+
+        public static IEnumerable<PointLatLng> GetStat()
+        {
+            using (var db = new XdwContext())
+            {
+                db.Database.CreateIfNotExists();
+
+                return db.Xdws.Where(p => p.XdwId == 25).Select(p => new PointLatLng(double.Parse(p.XdwLat),
+                    double.Parse(p.XdwLon)));
+
+                //db.Xdws.GroupBy(xdw => xdw.XdwName).ToList().ForEach(x =>
+                //{
+                //    Trace.WriteLine(string.Format("ID: {0}, Name: {1}, Count: {2}", x.Key, x.First().XdwName, x.Count()));
+                //});
+                //db.SaveChanges();
             }
         }
 
@@ -178,7 +239,7 @@ namespace PokemonGoMap
             mDbConnection = new SQLiteConnection("Data Source=pg.sqlite;Version=3;");
             mDbConnection.Open();
 
-            var sqlOperation = string.Format("CREATE TABLE {0} (XdwLat VARCHAR(50), (XdwLon VARCHAR(50))", name);
+            var sqlOperation = string.Format("CREATE TABLE Xdws (XdwLat VARCHAR(50), (XdwLon VARCHAR(50))");
             var command = new SQLiteCommand(sqlOperation, mDbConnection);
             command.ExecuteNonQuery();
             mDbConnection.Close();

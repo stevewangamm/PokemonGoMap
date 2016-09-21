@@ -17,12 +17,12 @@ namespace PokemonGoMap
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            //Application.Run(new FormStatResult());
+            Application.Run(new FormStatResult());
             //Application.Run(new Form1());
-            Application.Run(new SelectForm());
+            //Application.Run(new SelectForm());
 
-            //DownloadData.Run();
             //DownloadData.StoreStat();
+            //DownloadData.ShowStat();
             //CreateReport.Run();
             //CommitReport.Run();
         }

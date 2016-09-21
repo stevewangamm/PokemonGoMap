@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SQLite;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -13,45 +15,114 @@ using GMap.NET.WindowsForms;
 using GMap.NET.WindowsForms.Markers;
 using GMap.NET.WindowsForms.ToolTips;
 using GMapWinFormDemo;
+using Manina.Windows.Forms;
 
 namespace PokemonGoMap
 {
     public partial class FormStatResult : Form
     {
         private GMapOverlay objects = new GMapOverlay("objects"); //放置marker的图层
+
+        private PkmIdName.Pkm pkmToCount;
+
         public FormStatResult()
         {
             InitializeComponent();
-
+            this.listBoxPglist.Items.AddRange(
+                PkmIdName.PkmNameIdList.Select(p => p.Id.ToString() + " " + p.Name + " " + p.NameCn).ToArray());
         }
         private void FormStatResult_Load(object sender, EventArgs e)
         {
-            //use google provider
             this.gMapControl1.MapProvider = GoogleMapProvider.Instance;
-            //get tiles from server only
             this.gMapControl1.Manager.Mode = AccessMode.ServerOnly;
-            //not use proxy
             GMapProvider.WebProxy = null;
-            //center map on moscow
             this.gMapControl1.Position = new PointLatLng(1.323911f, 103.663055f);
 
-            //zoom min/max; default both = 2
             this.gMapControl1.MinZoom = 1;
             this.gMapControl1.MaxZoom = 20;
-            //set zoom
-            this.gMapControl1.Zoom = 10;
-            gMapControl1.MarkersEnabled = true;
-            gMapControl1.Overlays.Add(objects);
+            this.gMapControl1.Zoom = 11;
+            this.gMapControl1.MarkersEnabled = true;
+            this.gMapControl1.Overlays.Add(this.objects);
 
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            var img = Image.FromFile(@"..\..\P.ico");
-            var gpMarker = new GMapMarkerImage(new PointLatLng(1.323911f, 103.663055f), img );
+            UpdateWithNormalOp();
+            this.gMapControl1.Refresh();
+        }
 
-            objects.Markers.Add(gpMarker);
-            
+        private void UpdateWithEf()
+        {
+            //var img = Image.FromFile(@"D:\VS15Projects\Projects\PokemonGoMap\PokemonGoMap\icons\25.png");
+
+            var img = this.pkmToCount.SmallIcon;
+
+            using (var db = new XdwContext())
+            {
+                //db.Database.CreateIfNotExists();
+                var count = db.Xdws.Count(p => p.XdwId == this.pkmToCount.Id);
+
+                Debug.WriteLine(count + " " + this.pkmToCount.Name + " found.");
+                if (count > 1000)
+                {
+                    MessageBox.Show(count + " " + this.pkmToCount.Name + " found.");
+                }
+                else
+                {
+                    //var foundList = db.Xdws.Where(p => p.XdwId == this.pkmToCount.Id).ToArray();
+                    foreach (var p in db.Xdws.Where(p => p.XdwId == this.pkmToCount.Id))
+                    {
+                        var gpMarker = new GMapMarkerImage(new PointLatLng(double.Parse(p.XdwLat),
+                            double.Parse(p.XdwLon)), img);
+                        this.objects.Markers.Add(gpMarker);
+                    }
+                }
+            }
+        }
+
+        private void UpdateWithNormalOp()
+        {
+            var img = this.pkmToCount.SmallIcon;
+            var dbConnection = new SQLiteConnection("Data Source=pg.sqlite;Version=3;");
+            dbConnection.Open();
+            string sql = "SELECT * FROM Xdws WHERE XdwId = 25";
+            SQLiteCommand command = new SQLiteCommand(sql, dbConnection);
+            SQLiteDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                //Debug.WriteLine("Name: " + reader["XdwName"] + "\tXdwLat: " + reader["XdwLat"] + "\tXdwLon " + reader["XdwLon"]);
+                var gpMarker = new GMapMarkerImage( new PointLatLng(double.Parse(reader["XdwLat"].ToString()),double.Parse(reader["XdwLon"].ToString())), img);
+                this.objects.Markers.Add(gpMarker);
+            }
+            reader.Close();
+            dbConnection.Close();
+        }
+
+        private void listBoxPglist_Click(object sender, EventArgs e)
+        {
+            var selectedIndex = this.listBoxPglist.SelectedIndex;
+            this.pkmToCount = PkmIdName.PkmNameIdList[selectedIndex];
+        }
+
+        private void gMapControl1_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                if (this.toolStrip1.Visible)
+                {
+                    this.toolStrip1.Visible = false;return;
+                }
+                this.toolStrip1.Location = new Point(
+                    this.gMapControl1.Left + e.Location.X,
+                    this.gMapControl1.Top + e.Location.Y);
+                this.toolStrip1.Visible = true;
+            }
+        }
+
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+            this.objects.Markers.Clear();
             this.gMapControl1.Refresh();
         }
     }

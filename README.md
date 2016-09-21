@@ -16,3 +16,10 @@ The core code is no more than 150 lines.
 ## Contribute
 
 Please join and expand the map to your areas.
+
+----
+
+All info above seems not valid anymore. And this project now so messed. 
+
+The goal is a tool can show the map with pokemons and a reminder for some rare pokemons.
+tbc.
