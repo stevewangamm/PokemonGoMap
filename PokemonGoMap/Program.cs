@@ -16,7 +16,7 @@ namespace Pgmasst
         {
 
             //var addresses = GeoUtility.GetAdresses(1.340507f, 103.747237f);
-            //SpeechUtil.SpeakSync(addresses);
+            //SpeechUtil.SpeakAsync(addresses);
             //Debug.WriteLine(GeoUtility.CalcuDeistance(32.9697, -96.80322, 29.46786, -98.53506, 'K'));
 
             RunForms();

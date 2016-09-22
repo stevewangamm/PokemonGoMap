@@ -16,5 +16,15 @@ namespace Pgmasst.Main.Watcher
         {
             InitializeComponent();
         }
+
+        private void buttonSelect_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonStart_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

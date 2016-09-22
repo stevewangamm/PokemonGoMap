@@ -110,6 +110,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Main\Pginfos\SaveConfigForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Main\Pginfos\SaveConfigForm.Designer.cs">
+      <DependentUpon>SaveConfigForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Utility\GeoUtility.cs" />
     <Compile Include="Utility\SpeechUtil.cs" />
     <Compile Include="WebApi\DownloadData.cs" />
@@ -159,6 +165,9 @@
     <Compile Include="Utility\XmlUtil.cs" />
     <EmbeddedResource Include="Main\FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Main\Pginfos\SaveConfigForm.resx">
+      <DependentUpon>SaveConfigForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Main\Watcher\FormWatcher.resx">
       <DependentUpon>FormWatcher.cs</DependentUpon>

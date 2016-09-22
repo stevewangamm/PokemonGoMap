@@ -35,6 +35,7 @@
             this.toolStripSelection = new System.Windows.Forms.ToolStrip();
             this.toolStripComboBoxRecommends = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripButtonShowoption = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonSave = new System.Windows.Forms.ToolStripButton();
             this.toolStripSelection.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -70,13 +71,15 @@
             // toolStripSelection
             // 
             this.toolStripSelection.Dock = System.Windows.Forms.DockStyle.None;
+            this.toolStripSelection.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStripSelection.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripComboBoxRecommends,
-            this.toolStripButtonShowoption});
+            this.toolStripButtonShowoption,
+            this.toolStripButtonSave});
             this.toolStripSelection.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
             this.toolStripSelection.Location = new System.Drawing.Point(123, 192);
             this.toolStripSelection.Name = "toolStripSelection";
-            this.toolStripSelection.Size = new System.Drawing.Size(124, 62);
+            this.toolStripSelection.Size = new System.Drawing.Size(123, 100);
             this.toolStripSelection.TabIndex = 2;
             this.toolStripSelection.Text = "toolStripFormSelection";
             this.toolStripSelection.Visible = false;
@@ -86,13 +89,8 @@
             this.toolStripComboBoxRecommends.AutoToolTip = true;
             this.toolStripComboBoxRecommends.BackColor = System.Drawing.SystemColors.AppWorkspace;
             this.toolStripComboBoxRecommends.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.toolStripComboBoxRecommends.Items.AddRange(new object[] {
-            "ajkf",
-            "adkfajf",
-            "ajfdlajflk",
-            "ajdfa"});
             this.toolStripComboBoxRecommends.Name = "toolStripComboBoxRecommends";
-            this.toolStripComboBoxRecommends.Size = new System.Drawing.Size(120, 23);
+            this.toolStripComboBoxRecommends.Size = new System.Drawing.Size(119, 23);
             this.toolStripComboBoxRecommends.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBoxRecommends_SelectedIndexChanged);
             // 
             // toolStripButtonShowoption
@@ -107,6 +105,18 @@
             this.toolStripButtonShowoption.Text = "Show Selected Only";
             this.toolStripButtonShowoption.ToolTipText = "Show Selected Only";
             this.toolStripButtonShowoption.Click += new System.EventHandler(this.toolStripButtonShowoption_Click);
+            // 
+            // toolStripButtonSave
+            // 
+            this.toolStripButtonSave.AutoSize = false;
+            this.toolStripButtonSave.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.toolStripButtonSave.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButtonSave.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonSave.Image")));
+            this.toolStripButtonSave.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonSave.Name = "toolStripButtonSave";
+            this.toolStripButtonSave.Size = new System.Drawing.Size(122, 25);
+            this.toolStripButtonSave.Text = "Save Selection";
+            this.toolStripButtonSave.Click += new System.EventHandler(this.toolStripButtonSave_Click);
             // 
             // SelectForm
             // 
@@ -133,5 +143,6 @@
         private System.Windows.Forms.ToolStrip toolStripSelection;
         private System.Windows.Forms.ToolStripComboBox toolStripComboBoxRecommends;
         private System.Windows.Forms.ToolStripButton toolStripButtonShowoption;
+        private System.Windows.Forms.ToolStripButton toolStripButtonSave;
     }
 }
