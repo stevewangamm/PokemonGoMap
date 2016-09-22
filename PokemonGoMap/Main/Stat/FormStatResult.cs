@@ -16,6 +16,8 @@ using GMap.NET.WindowsForms.Markers;
 using GMap.NET.WindowsForms.ToolTips;
 using GMapWinFormDemo;
 using Manina.Windows.Forms;
+using Pgmasst.Api;
+using Pgmasst.Main.Pginfos;
 
 namespace PokemonGoMap
 {
@@ -23,7 +25,7 @@ namespace PokemonGoMap
     {
         private GMapOverlay objects = new GMapOverlay("objects"); //放置marker的图层
 
-        private PkmIdName.Pkm pkmToCount;
+        private Sprite _spriteToCount;
 
         public FormStatResult()
         {
@@ -56,22 +58,22 @@ namespace PokemonGoMap
         {
             //var img = Image.FromFile(@"D:\VS15Projects\Projects\PokemonGoMap\PokemonGoMap\icons\25.png");
 
-            var img = this.pkmToCount.SmallIcon;
+            var img = this._spriteToCount.SmallIcon;
 
             using (var db = new XdwContext())
             {
                 //db.Database.CreateIfNotExists();
-                var count = db.Xdws.Count(p => p.XdwId == this.pkmToCount.Id);
+                var count = db.Xdws.Count(p => p.XdwId == this._spriteToCount.Id);
 
-                Debug.WriteLine(count + " " + this.pkmToCount.Name + " found.");
+                Debug.WriteLine(count + " " + this._spriteToCount.Name + " found.");
                 if (count > 1000)
                 {
-                    MessageBox.Show(count + " " + this.pkmToCount.Name + " found.");
+                    MessageBox.Show(count + " " + this._spriteToCount.Name + " found.");
                 }
                 else
                 {
                     //var foundList = db.Xdws.Where(p => p.XdwId == this.pkmToCount.Id).ToArray();
-                    foreach (var p in db.Xdws.Where(p => p.XdwId == this.pkmToCount.Id))
+                    foreach (var p in db.Xdws.Where(p => p.XdwId == this._spriteToCount.Id))
                     {
                         var gpMarker = new GMapMarkerImage(new PointLatLng(double.Parse(p.XdwLat),
                             double.Parse(p.XdwLon)), img);
@@ -83,12 +85,12 @@ namespace PokemonGoMap
 
         private void UpdateWithNormalOp()
         {
-            var img = this.pkmToCount.SmallIcon;
+            var img = this._spriteToCount.SmallIcon;
             var dbConnection = new SQLiteConnection("Data Source=pg.sqlite;Version=3;");
             dbConnection.Open();
-            string sql = "SELECT * FROM Xdws WHERE XdwId = 25";
-            SQLiteCommand command = new SQLiteCommand(sql, dbConnection);
-            SQLiteDataReader reader = command.ExecuteReader();
+            var sql = "SELECT * FROM Xdws WHERE XdwId = 25";
+            var command = new SQLiteCommand(sql, dbConnection);
+            var reader = command.ExecuteReader();
             while (reader.Read())
             {
                 //Debug.WriteLine("Name: " + reader["XdwName"] + "\tXdwLat: " + reader["XdwLat"] + "\tXdwLon " + reader["XdwLon"]);
@@ -102,7 +104,7 @@ namespace PokemonGoMap
         private void listBoxPglist_Click(object sender, EventArgs e)
         {
             var selectedIndex = this.listBoxPglist.SelectedIndex;
-            this.pkmToCount = PkmIdName.PkmNameIdList[selectedIndex];
+            this._spriteToCount = PkmIdName.PkmNameIdList[selectedIndex];
         }
 
         private void gMapControl1_MouseClick(object sender, MouseEventArgs e)

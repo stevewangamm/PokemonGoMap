@@ -6,10 +6,10 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{3D09FCA7-48AF-4FE1-8E32-9E6B3B49D075}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PokemonGoMap</RootNamespace>
-    <AssemblyName>PokemonGoMap</AssemblyName>
+    <RootNamespace>Pgmasst</RootNamespace>
+    <AssemblyName>pg</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -62,6 +62,10 @@
       <HintPath>..\packages\GMap.NET.WindowsForms.1.7.1\lib\net40\GMap.NET.WindowsForms.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="HtmlAgilityPack, Version=1.4.9.5, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.4.9.5\lib\Net45\HtmlAgilityPack.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="ImageListView, Version=11.0.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ImageListView.11.0.4.0\lib\net35\ImageListView.dll</HintPath>
       <Private>True</Private>
@@ -72,6 +76,10 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SpeechLib.Models, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SpeechLib.Models.1.6.0\lib\net40\SpeechLib.Models.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -89,6 +97,8 @@
       <HintPath>..\packages\System.Data.SQLite.Linq.1.0.102.0\lib\net451\System.Data.SQLite.Linq.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Speech" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -100,44 +110,60 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="_Orig\Account.cs" />
-    <Compile Include="_Orig\CommitReport.cs" />
-    <Compile Include="_Orig\CreateReport.cs" />
-    <Compile Include="DownloadData.cs" />
-    <Compile Include="_Orig\Form1.cs">
+    <Compile Include="Utility\GeoUtility.cs" />
+    <Compile Include="Utility\SpeechUtil.cs" />
+    <Compile Include="WebApi\DownloadData.cs" />
+    <Compile Include="WebApi\IModelSpawnInfo.cs" />
+    <Compile Include="Main\FormMain.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="_Orig\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Main\FormMain.Designer.cs">
+      <DependentUpon>FormMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormStatResult.cs">
+    <Compile Include="Main\Store\FormStore.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormStatResult.Designer.cs">
+    <Compile Include="Main\Store\FormStore.Designer.cs">
+      <DependentUpon>FormStore.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\IMain.cs" />
+    <Compile Include="Main\Pginfos\Pkm.cs" />
+    <Compile Include="Main\Watcher\FormWatcher.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Main\Watcher\FormWatcher.Designer.cs">
+      <DependentUpon>FormWatcher.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WebApi\NewApi.cs" />
+    <Compile Include="Main\Stat\FormStatResult.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Main\Stat\FormStatResult.Designer.cs">
       <DependentUpon>FormStatResult.cs</DependentUpon>
     </Compile>
-    <Compile Include="GmapMarker.cs" />
-    <Compile Include="_Orig\Monster.cs" />
-    <Compile Include="Api\NewApi.cs" />
-    <Compile Include="Pginfos\PkmIdName.cs" />
+    <Compile Include="Main\Stat\GmapMarker.cs" />
+    <Compile Include="Main\Pginfos\PkmIdName.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Pginfos\SelectForm.cs">
+    <Compile Include="Main\Pginfos\SelectForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Pginfos\SelectForm.Designer.cs">
+    <Compile Include="Main\Pginfos\SelectForm.Designer.cs">
       <DependentUpon>SelectForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="_Orig\Utility\DailyLogger.cs" />
-    <Compile Include="_Orig\Utility\FastHttpRequest.cs" />
-    <Compile Include="_Orig\Utility\JavascriptUtil.cs" />
-    <Compile Include="_Orig\Utility\PredicateWait.cs" />
-    <Compile Include="_Orig\Utility\StreamUtil.cs" />
-    <Compile Include="_Orig\Utility\XmlUtil.cs" />
-    <EmbeddedResource Include="_Orig\Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Utility\DailyLogger.cs" />
+    <Compile Include="Utility\FastHttpRequest.cs" />
+    <Compile Include="Utility\JavascriptUtil.cs" />
+    <Compile Include="Utility\PredicateWait.cs" />
+    <Compile Include="Utility\StreamUtil.cs" />
+    <Compile Include="Utility\XmlUtil.cs" />
+    <EmbeddedResource Include="Main\FormMain.resx">
+      <DependentUpon>FormMain.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormStatResult.resx">
+    <EmbeddedResource Include="Main\Watcher\FormWatcher.resx">
+      <DependentUpon>FormWatcher.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Main\Stat\FormStatResult.resx">
       <DependentUpon>FormStatResult.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -148,8 +174,9 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="Pginfos\SelectForm.resx">
+    <EmbeddedResource Include="Main\Pginfos\SelectForm.resx">
       <DependentUpon>SelectForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="App.config" />
@@ -167,6 +194,7 @@
   <ItemGroup>
     <Content Include="P.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

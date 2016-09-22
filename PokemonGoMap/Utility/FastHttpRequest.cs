@@ -37,7 +37,7 @@ namespace PokemonGoMap.Utility
             request.UserAgent = "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.85 Safari/537.36";
 
             request.Proxy = null;
-
+            request.Headers.Add("accept-language", "zh-CN,zh;q=0.8,en;q=0.6");
             return request;
         }
     }

@@ -3,6 +3,7 @@ using System.Drawing;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Linq;
+using Pgmasst.Main.Pginfos;
 
 namespace PokemonGoMap
 {
@@ -318,17 +319,8 @@ namespace PokemonGoMap
 	<div>151 Mew</div>";
         #endregion
 
-        public static readonly List<Pkm> PkmNameIdList;
+        public static readonly List<Sprite> PkmNameIdList;
         private static Regex reg = new Regex(@"(?<id>\d{3}) (?<name>\w+)", RegexOptions.Compiled);
-
-        public struct Pkm
-        {
-            public string Name;
-            public string NameCn;
-            public int Id;
-            public Image BigIcon;
-            public Image SmallIcon;
-        }
 
         static PkmIdName()
         {
@@ -338,14 +330,14 @@ namespace PokemonGoMap
 
             PkmNameIdList = reg.Matches(PokemonNameId).Cast<Match>().Select(m =>
             {
-                Pkm pkm;
-                pkm.Id = int.Parse(m.Groups["id"].Value);
-                pkm.Name = m.Groups["name"].Value;
-                pkm.NameCn = PokemonCnNames[i];
-                pkm.BigIcon = Image.FromFile( bigIcons[i].FullName);
-                pkm.SmallIcon = Image.FromFile(smallIcons[i].FullName);
+                Sprite sprite = new Sprite();
+                sprite.Id = int.Parse(m.Groups["id"].Value);
+                sprite.Name = m.Groups["name"].Value;
+                sprite.NameCn = PokemonCnNames[i];
+                sprite.BigIcon = Image.FromFile( bigIcons[i].FullName);
+                sprite.SmallIcon = Image.FromFile(smallIcons[i].FullName);
                 i += 1;
-                return pkm;
+                return sprite;
             }).ToList();
         }
 
