@@ -5,6 +5,7 @@ using System.IO;
 using PokemonGoMap.Utility;
 using HtmlAgilityPack;
 using System.Linq;
+
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 //:::                                                                         :::
 //:::  This routine calculates the distance between two points (given the     :::
@@ -33,7 +34,6 @@ using System.Linq;
 //:::                                                                         :::
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-
 namespace Pgmasst.Utility
 {
     public class GeoUtility
@@ -46,7 +46,13 @@ namespace Pgmasst.Utility
 
         //http://maps.google.com/maps/api/geocode/xml?latlng=40.714224,-73.961452&sensor=false 
 
-        public static string GetAdresses(double lat, double lng)
+        /// <summary>
+        /// get address
+        /// </summary>
+        /// <param name="lat">lat</param>
+        /// <param name="lng">lng</param>
+        /// <returns></returns>
+        public static string GetAdress(double lat, double lng)
         {
             var url =
                 string.Format(@"http://maps.google.com/maps/api/geocode/xml?latlng={0},{1}&sensor=false ", lat, lng);
@@ -96,17 +102,18 @@ namespace Pgmasst.Utility
         public static double CalcuDeistance(double lat1, double lon1, double lat2, double lon2, char unit)
         {
             double theta = lon1 - lon2;
-            double dist = Math.Sin(Deg2Rad(lat1)) * Math.Sin(Deg2Rad(lat2)) + Math.Cos(Deg2Rad(lat1)) * Math.Cos(Deg2Rad(lat2)) * Math.Cos(Deg2Rad(theta));
+            double dist = Math.Sin(Deg2Rad(lat1))*Math.Sin(Deg2Rad(lat2)) +
+                          Math.Cos(Deg2Rad(lat1))*Math.Cos(Deg2Rad(lat2))*Math.Cos(Deg2Rad(theta));
             dist = Math.Acos(dist);
             dist = Rad2Deg(dist);
-            dist = dist * 60 * 1.1515;
+            dist = dist*60*1.1515;
             if (unit == 'K')
             {
-                dist = dist * 1.609344;
+                dist = dist*1.609344;
             }
             else if (unit == 'N')
             {
-                dist = dist * 0.8684;
+                dist = dist*0.8684;
             }
             return (dist);
         }
@@ -116,7 +123,7 @@ namespace Pgmasst.Utility
         //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
         private static double Deg2Rad(double deg)
         {
-            return (deg * Math.PI / 180.0);
+            return (deg*Math.PI/180.0);
         }
 
         //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -124,7 +131,7 @@ namespace Pgmasst.Utility
         //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
         private static double Rad2Deg(double rad)
         {
-            return (rad / Math.PI * 180.0);
+            return (rad/Math.PI*180.0);
         }
     }
 }

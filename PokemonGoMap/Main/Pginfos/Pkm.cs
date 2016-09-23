@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Drawing;
 
 namespace Pgmasst.Main.Pginfos
 {
@@ -16,8 +15,15 @@ namespace Pgmasst.Main.Pginfos
         public double Lng;
         public int DeSpawn;
 
-        public Sprite()
+        public override string ToString()
         {
+            return string.Format("Id: {0}, Name: {1}, NameCn: {2}, Lat: {3}, Lng: {4}, Despawn: {5}",
+                this.Id,
+                this.Name,
+                this.NameCn,
+                this.Lat,
+                this.Lng,
+                this.DeSpawn);
         }
     }
 }

@@ -36,6 +36,8 @@
             this.toolStripComboBoxRecommends = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripButtonShowoption = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonSave = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonSelectionDone = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonExit = new System.Windows.Forms.ToolStripButton();
             this.toolStripSelection.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -75,11 +77,13 @@
             this.toolStripSelection.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripComboBoxRecommends,
             this.toolStripButtonShowoption,
-            this.toolStripButtonSave});
+            this.toolStripButtonSave,
+            this.toolStripButtonSelectionDone,
+            this.toolStripButtonExit});
             this.toolStripSelection.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
             this.toolStripSelection.Location = new System.Drawing.Point(123, 192);
             this.toolStripSelection.Name = "toolStripSelection";
-            this.toolStripSelection.Size = new System.Drawing.Size(123, 100);
+            this.toolStripSelection.Size = new System.Drawing.Size(123, 156);
             this.toolStripSelection.TabIndex = 2;
             this.toolStripSelection.Text = "toolStripFormSelection";
             this.toolStripSelection.Visible = false;
@@ -118,6 +122,30 @@
             this.toolStripButtonSave.Text = "Save Selection";
             this.toolStripButtonSave.Click += new System.EventHandler(this.toolStripButtonSave_Click);
             // 
+            // toolStripButtonSelectionDone
+            // 
+            this.toolStripButtonSelectionDone.AutoSize = false;
+            this.toolStripButtonSelectionDone.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.toolStripButtonSelectionDone.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButtonSelectionDone.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonSelectionDone.Image")));
+            this.toolStripButtonSelectionDone.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonSelectionDone.Name = "toolStripButtonSelectionDone";
+            this.toolStripButtonSelectionDone.Size = new System.Drawing.Size(122, 25);
+            this.toolStripButtonSelectionDone.Text = "Selection Done";
+            this.toolStripButtonSelectionDone.Click += new System.EventHandler(this.toolStripButtonSelectionDone_Click);
+            // 
+            // toolStripButtonExit
+            // 
+            this.toolStripButtonExit.AutoSize = false;
+            this.toolStripButtonExit.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.toolStripButtonExit.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButtonExit.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonExit.Image")));
+            this.toolStripButtonExit.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonExit.Name = "toolStripButtonExit";
+            this.toolStripButtonExit.Size = new System.Drawing.Size(122, 25);
+            this.toolStripButtonExit.Text = "Exit";
+            this.toolStripButtonExit.Click += new System.EventHandler(this.toolStripButtonExit_Click);
+            // 
             // SelectForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -144,5 +172,7 @@
         private System.Windows.Forms.ToolStripComboBox toolStripComboBoxRecommends;
         private System.Windows.Forms.ToolStripButton toolStripButtonShowoption;
         private System.Windows.Forms.ToolStripButton toolStripButtonSave;
+        private System.Windows.Forms.ToolStripButton toolStripButtonSelectionDone;
+        private System.Windows.Forms.ToolStripButton toolStripButtonExit;
     }
 }

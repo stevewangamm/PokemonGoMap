@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -8,11 +10,12 @@ using PokemonGoMap;
 
 namespace Pgmasst.Main.Pginfos
 {
-    public partial class SelectForm : Form
+    public partial class SelectForm : Form, IFormOutput<List<string>>
     {
         //rare
         //super rare
         //....
+        private readonly string configFile = @"..\watchlist.txt";
 
         private readonly List<ImageListViewItem> hidedImgListItems = new List<ImageListViewItem>();
 
@@ -20,12 +23,9 @@ namespace Pgmasst.Main.Pginfos
 
         private readonly List<string> _recommendsNames = new List<string>();
 
-        private readonly List<int> _selectedIndexes;
-
         public SelectForm()
         {
-            this._selectedIndexes = new List<int>();
-            InitializeComponent();
+            InitializeComponent(); this.DialogResult = DialogResult.None;
             var i = 0;
             //var imgList = new ImageList();
             //imgList.Images.AddRange(new DirectoryInfo(@"..\hq icons\").GetFiles("*.png").OrderBy(f => f.Name.Length).Select(f => Image.FromFile(f.FullName)).ToArray());
@@ -58,18 +58,19 @@ namespace Pgmasst.Main.Pginfos
             AddRecommendSelections();
         }
 
-        public SelectForm(out List<int> selectedIndexes):this()
+        public SelectForm(Action<List<string>> setIndexes):this()
         {
-            selectedIndexes = this._selectedIndexes;
+            this.FormBorderStyle = FormBorderStyle.None;
+            this.Output = setIndexes;
         }
 
         private void GetConfig()
         {
-            foreach (var l in File.ReadAllLines(@"..\watchlist.txt"))
+            foreach (var l in File.ReadAllLines(this.configFile))
             {
                 if (string.IsNullOrEmpty(l.Trim()))
                     continue;
-                var splitFields = l.Split(',');
+                var splitFields = l.Split(new [] {','}, StringSplitOptions.RemoveEmptyEntries);
                 var configName = splitFields[0];
                 this._recommendsNames.Add(configName);
                 var indexes = splitFields.Skip(1).Select(n => int.Parse(n)).ToArray();
@@ -135,15 +136,45 @@ namespace Pgmasst.Main.Pginfos
             this.toolStripSelection.Visible = false;
         }
 
-        protected override void OnClosed(EventArgs e)
-        {
-            this._selectedIndexes.AddRange(this.imageListViewPkms.SelectedItems.Select(item => item.Index + 1));
-        }
-
         private void toolStripButtonSave_Click(object sender, EventArgs e)
         {
             var name = "";
-            var result = new SaveConfigForm(ref name).ShowDialog();
+            Action<string> setNameDel = n =>  name = n ;
+            if (new SaveConfigForm(setNameDel).ShowDialog() == DialogResult.OK)
+            {
+                if (_recommendsNames.Contains(name))
+                {
+                    MessageBox.Show("Name exists already");
+                    return;
+                }
+                //Debug.WriteLine(string.Format("{0}, {1}", name, this.imageListViewPkms.Items.Where(i => i.Selected).Select(i => (int.Parse(i.Tag.ToString()) + 1).ToString()).Aggregate((i1, i2)=> i1+","+i2)));
+
+                var selectedIndexes = this.imageListViewPkms.Items.Where(i => i.Selected)
+                    .Select(i => (int.Parse(i.Tag.ToString()) + 1)).ToArray();
+                this._recommends.Add(selectedIndexes);
+                this._recommendsNames.Add(name);
+
+                File.AppendAllText(this.configFile, string.Format("{0}, {1}", name,
+                    selectedIndexes.Select(i => i.ToString()).Aggregate((i1, i2) => i1 + "," + i2)));
+            }
         }
+
+        private void toolStripButtonSelectionDone_Click(object sender, EventArgs e)
+        {
+            this.Output(this.imageListViewPkms.Items
+                .Where(i => i.Selected)
+                .Select(i => (int.Parse(i.Tag.ToString()) + 1).ToString())
+                .ToList());
+            this.DialogResult = DialogResult.OK;
+            this.Close();
+        }
+
+        private void toolStripButtonExit_Click(object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.Cancel;
+            this.Close();
+        }
+
+        public Action<List<string>> Output { get; }
     }
 }

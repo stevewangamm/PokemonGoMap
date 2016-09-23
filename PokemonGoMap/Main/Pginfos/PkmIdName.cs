@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Text.RegularExpressions;
 using System.Linq;
-using Pgmasst.Main.Pginfos;
+using System.Text.RegularExpressions;
 
-namespace PokemonGoMap
+namespace Pgmasst.Main.Pginfos
 {
     public class PkmIdName
     {
@@ -343,11 +342,15 @@ namespace PokemonGoMap
 
         public static int GetId(string name)
         {
-            return PkmNameIdList.Single(p => p.Name == name).Id;
+            return PkmNameIdList.Single(p => p.Name == name || p.NameCn == name).Id;
         }
         public static string GetName(int id)
         {
             return PkmNameIdList.Single(p => p.Id == id).Name;
+        }
+        public static string GetCnName(int id)
+        {
+            return PkmNameIdList.Single(p => p.Id == id).NameCn;
         }
     }
 }
