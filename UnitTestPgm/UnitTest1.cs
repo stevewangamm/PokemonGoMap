@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Pgmasst.Api;
 using System.Linq;
+using System.Text.RegularExpressions;
+using Pgmasst.Utility;
+
 namespace UnitTestPgm
 {
     [TestClass]
@@ -19,6 +23,11 @@ namespace UnitTestPgm
             {
                 Debug.WriteLine(p);
             });
+        }
+        [TestMethod]
+        public void TestSpeech()
+        {
+
         }
     }
 }

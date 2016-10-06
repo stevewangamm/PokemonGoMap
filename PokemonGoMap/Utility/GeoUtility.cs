@@ -5,6 +5,7 @@ using System.IO;
 using PokemonGoMap.Utility;
 using HtmlAgilityPack;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 //:::                                                                         :::
@@ -38,6 +39,21 @@ namespace Pgmasst.Utility
 {
     public class GeoUtility
     {
+        private static readonly Regex UselessAddField = new Regex(@"(?:新加坡)|(?:\d{6})", RegexOptions.Compiled);
+        private static readonly Regex ShorhandAddField = new Regex(@"\s+(?:Rd)|(?:Dr)[\s,]", RegexOptions.Compiled);
+
+        /// <summary>
+        /// remove useless field of address and complete the shorthand
+        /// </summary>
+        /// <returns></returns>
+        private static string ReviseAddress(string origadd)
+        {
+            if (origadd == null) return string.Empty;
+            origadd = UselessAddField.Replace(origadd, "");
+            origadd = ShorhandAddField.Replace(origadd, " road");
+            return origadd;
+        }
+
         //private struct XmlAdressElement
         //{
         //    public string AddressType;
@@ -65,7 +81,7 @@ namespace Pgmasst.Utility
                 using (var sr = new StreamReader(response.GetResponseStream()))
                 {
                     returnAddressInfo = sr.ReadToEnd();
-                    Debug.WriteLine(returnAddressInfo);
+                    //Debug.WriteLine(returnAddressInfo);
                 }
             }
 
@@ -81,7 +97,10 @@ namespace Pgmasst.Utility
             {
                 var typenode = n.SelectSingleNode("type");
                 if (typenode == null)
+                {
+                    typenode = n.SelectSingleNode("street_address");
                     return false;
+                }
                 if (typenode.InnerText == "premise" ||
                     typenode.InnerText == "establishment" ||
                     typenode.InnerText == "route")
@@ -96,7 +115,7 @@ namespace Pgmasst.Utility
                 else if (node.SelectSingleNode("type").InnerText == "route")
                     address = node.SelectSingleNode("formatted_address").InnerText;
             }
-            return address;
+            return ReviseAddress(address);
         }
 
         public static double CalcuDeistance(double lat1, double lon1, double lat2, double lon2, char unit)
@@ -115,7 +134,7 @@ namespace Pgmasst.Utility
             {
                 dist = dist*0.8684;
             }
-            return (dist);
+            return dist;
         }
 
         //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -19,6 +22,7 @@ namespace Pgmasst.Main.Watcher
 {
     public partial class FormWatcher : Form
     {
+        #region attributes
         private double _currentLat = 1.339515;
         private double _currentLng = 103.745707;
 
@@ -46,6 +50,8 @@ namespace Pgmasst.Main.Watcher
 
         private Task _downloadingTask;
 
+        private Task _reportingTask;
+
         private Image[] _markerImgs;
 
         private Queue<List<Sprite>> _que;
@@ -56,6 +62,9 @@ namespace Pgmasst.Main.Watcher
         /// unit: seconds
         /// </summary>
         private int _queryInterval;
+        #endregion
+
+        #region constructor and init
 
         public FormWatcher()
         {
@@ -66,13 +75,22 @@ namespace Pgmasst.Main.Watcher
             this._stopColor = Color.Gray;
             InitializeComponent();
             this._since = "0";
+            this._distanceThreshhold = (double) this.numericUpDownThreshhold.Value;
             this._que = new Queue<List<Sprite>>();
             this._watchIndexes = new List<string>();
+
+
+
             this._downloadingTask = new Task(DownloadData);
+            this._reportingTask = new Task(Reporting);
             this._workingStatus = WorkingStatus.Stop;
+
             this._queryInterval = 1;
             this.timerUpdate.Tick += TimerUpdate_Tick;
+
+            
             this._downloadingTask.Start();
+            this._reportingTask.Start();
         }
 
         private void FormWatcher_Load(object sender, EventArgs e)
@@ -89,6 +107,9 @@ namespace Pgmasst.Main.Watcher
             this.gMapControlWatcher.Overlays.Add(this._objects);
         }
 
+        #endregion
+
+        #region controls
         private void buttonSelect_Click(object sender, EventArgs e)
         {
             Action<List<string>> setIndexes = list =>
@@ -129,15 +150,19 @@ namespace Pgmasst.Main.Watcher
 
         private void TimerUpdate_Tick(object sender, EventArgs e)
         {
-            lock(this.gMapControlWatcher)
+            //lock(this.gMapControlWatcher)
+            Task.Factory.StartNew(() =>
             {
-                var unixTimeNow = (int)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
-                foreach (var marker in this._objects.Markers)
+                lock (this._objects.Markers)
                 {
-                    if((int)marker.Tag  < unixTimeNow)
-                        this._objects.Markers.Remove(marker);
+                    var unixTimeNow = (int) (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+                    foreach (var marker in this._objects.Markers)
+                    {
+                        if ((int) marker.Tag < unixTimeNow)
+                            this._objects.Markers.Remove(marker);
+                    }
                 }
-            }
+            });
         }
 
         private void numericUpDownQueryInterval_ValueChanged(object sender, EventArgs e)
@@ -166,7 +191,6 @@ namespace Pgmasst.Main.Watcher
                 }
             }
         }
-
         protected override void OnClosed(EventArgs e)
         {
             this._workingStatus = WorkingStatus.Exit;
@@ -174,12 +198,13 @@ namespace Pgmasst.Main.Watcher
             this.gMapControlWatcher.Visible = false;
             base.OnClosed(e);
         }
+        #endregion controls
 
         private void DownloadData()
         {
             var sgpkmapi = new SgpkmApi();
             var loop = true;
-            while (loop)
+            var downloadAction = new Action(() =>
             {
                 switch (this._workingStatus)
                 {
@@ -192,32 +217,54 @@ namespace Pgmasst.Main.Watcher
                     case WorkingStatus.Pause:
                         break;
                     case WorkingStatus.Running:
+                        if (this._watchIndexes?.Count == 0)
+                        {
+                            MessageBox.Show("Select the indexes 1st.");
+                            Thread.Sleep(100);
+                            break;
+                        }
                         var currentPkms = sgpkmapi.GetCurrentSprites(this._since, this._watchIndexes)?.ToList();
+                        Debug.WriteLine("Received " + currentPkms?.Count);
                         this._since = (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds.ToString();
 
-                        if (this.gMapControlWatcher.Visible)
-                            lock (this.gMapControlWatcher)
+                        //if (this.gMapControlWatcher.Visible)
+                        //lock (this.gMapControlWatcher)
+                        lock (this._objects.Markers)
                             {
                                 currentPkms?.ForEach(p =>
                                 {
                                     var gpMarker = new GMapMarkerImage(new PointLatLng(p.Lat, p.Lng),
-                                        this._markerImgs[p.Id - 1]) {Tag = p.DeSpawn};
+                                        this._markerImgs[p.Id - 1])
+                                    {Tag = p.DeSpawn};
                                     this._objects.Markers.Add(gpMarker);
                                 });
                             }
-                        Thread.Sleep(1000 * 60 *this._queryInterval);
+                        this._que.Enqueue(currentPkms);
+                        Thread.Sleep(1000*60*this._queryInterval);
                         break;
                     case WorkingStatus.Stop:
                         Thread.Sleep(100);
                         break;
                 }
+            });
+            while (loop)
+            {
+                try
+                {
+                    downloadAction();
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine("Error in DownloadData: " + ex);
+                }
             }
         }
-
+        
         private void Reporting()
         {
             var loop = true;
-            while (loop)
+
+            var statusOperation = new Action(() =>
             {
                 switch (this._workingStatus)
                 {
@@ -238,21 +285,40 @@ namespace Pgmasst.Main.Watcher
                                     var address = GeoUtility.GetAdress(s.Lat, s.Lng);
                                     var dt = DatetimeUtility.UnixTimeStampToDateTime(s.DeSpawn);
 
-                                    var wordsEn = string.Format("Found {0} at {1}, {2} minutes {3} seconds left only.", PkmIdName.GetName(s.Id), address, (dt - DateTime.Now).Minutes, (dt - DateTime.Now).Seconds);
-                                    SpeechUtil.SpeakSync(wordsEn);
+                                    //var wordsEn = string.Format("Found {0} at {1}, {2} minutes {3} seconds left only.", PkmIdName.GetName(s.Id), address, (dt - DateTime.Now).Minutes, (dt - DateTime.Now).Seconds);
+                                    //SpeechUtil.SpeakSync(wordsEn);
 
-                                    var wordsCn = string.Format("发现 {0} 在 {1}, 还有{2}分{3}秒。", PkmIdName.GetCnName(s.Id), address, (dt - DateTime.Now).Minutes, (dt - DateTime.Now).Seconds);
+                                    var wordsCn = string.Format("发现 {0} 在 {1}, 还有{2}分{3}秒。",
+                                        PkmIdName.GetCnName(s.Id),
+                                        string.IsNullOrWhiteSpace(address)
+                                            ? string.Format("距离{0}千米",
+                                                distance.ToString(CultureInfo.InvariantCulture).Substring(0, 3))
+                                            : address,
+                                        (dt - DateTime.Now).Minutes,
+                                        (dt - DateTime.Now).Seconds);
                                     SpeechUtil.SpeakSync(wordsCn);
                                 }
                             });
                         }
-                        Thread.Sleep(1000 * 60 * this._queryInterval);
+                        Thread.Sleep(1000*60*this._queryInterval);
                         break;
                     case WorkingStatus.Pause:
                     case WorkingStatus.Error:
                     case WorkingStatus.Stop:
                         Thread.Sleep(100);
                         break;
+                }
+            });
+
+            while (loop)
+            {
+                try
+                {
+                    statusOperation();
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine("Error in Reporting: " + ex);
                 }
             }
         }

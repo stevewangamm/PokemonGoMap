@@ -84,7 +84,7 @@
             this.numericUpDownThreshhold.TabIndex = 3;
             this.toolTipQueryInterval.SetToolTip(this.numericUpDownThreshhold, "Distance Threshhold");
             this.numericUpDownThreshhold.Value = new decimal(new int[] {
-            5,
+            2,
             0,
             0,
             0});

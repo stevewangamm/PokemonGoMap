@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Speech.Synthesis;
-using System;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 namespace Pgmasst.Utility
@@ -52,6 +51,7 @@ namespace Pgmasst.Utility
         {
             Speaker.Speak(word);
         }
+
         public static void SpeakAsync(string word)
         {
             var ret = Speaker.SpeakAsync(word);         

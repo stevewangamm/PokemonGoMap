@@ -303,49 +303,62 @@ namespace Pgmasst.Api
 
         public IEnumerable<Sprite> GetCurrentSprites(string since, IEnumerable<string> ids)
         {
-            #region get
+            try
+            {
+                #region get
 
-            var url = string.Format("https://sgpokemap.com/query3.php?since={0}&mons={1}",
-                since, ids.Aggregate((id1, id2) => id1 + "," + id2));
-            var request = (HttpWebRequest) WebRequest.Create(url);
-            request.Credentials = CredentialCache.DefaultCredentials;
-            request.Method = WebRequestMethods.Http.Get;
-            request.Accept = "*/*";
-            request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-            request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.84 Safari/537.36";
-            request.Referer = "https://sgpokemap.com/";
-            request.Headers.Add("authority", "sgpokemap.com");
-            request.Headers.Add("accept-encoding", "gzip, deflate, sdch, br");
-            request.Headers.Add("accept-language", "zh-CN,zh;q=0.8,en;q=0.6");
-            request.Headers.Add("cache-control", "max-age=0");
-            request.Headers.Add("cookie", "__cfduid=d3b40e8c5519b26b97cd57855fea053d91473909813; _gat=1; _ga=GA1.2.760087683.1473909791");
-            request.Headers.Add("x-requested-with", "XMLHttpRequest");
-            var response = (HttpWebResponse)request.GetResponse();
-            Debug.WriteLine(response.StatusDescription);
-            var dataStream = response.GetResponseStream();
-            if (dataStream == null)
-            {
+                Debug.WriteLine("Since: " + since);
+                var url = string.Format("https://sgpokemap.com/query3.php?since={0}&mons={1}",
+                    since, ids.Aggregate((id1, id2) => id1 + "," + id2));
+                var request = (HttpWebRequest) WebRequest.Create(url);
+                request.Credentials = CredentialCache.DefaultCredentials;
+                request.Method = WebRequestMethods.Http.Get;
+                request.Accept = "*/*";
+                request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+                request.UserAgent =
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.84 Safari/537.36";
+                request.Referer = "https://sgpokemap.com/";
+                request.Headers.Add("authority", "sgpokemap.com");
+                request.Headers.Add("accept-encoding", "gzip, deflate, sdch, br");
+                request.Headers.Add("accept-language", "zh-CN,zh;q=0.8,en;q=0.6");
+                request.Headers.Add("cache-control", "max-age=0");
+                request.Headers.Add("cookie",
+                    "__cfduid=d3b40e8c5519b26b97cd57855fea053d91473909813; _gat=1; _ga=GA1.2.760087683.1473909791");
+                request.Headers.Add("x-requested-with", "XMLHttpRequest");
+                var response = (HttpWebResponse) request.GetResponse();
+                var dataStream = response.GetResponseStream();
+                if (dataStream == null)
+                {
+                    response.Close();
+                    return null;
+                }
+                var reader = new StreamReader(dataStream);
+                var responseFromServer = reader.ReadToEnd();
+                //Debug.WriteLine(responseFromServer);
+                dataStream?.Close();
                 response.Close();
-                return null;
+
+                #endregion
+
+                if (string.IsNullOrEmpty(responseFromServer))
+                    return null;
+                var m = JsonConvert.DeserializeObject<Mons>(responseFromServer);
+                Debug.WriteLine("Get data success: " + response.StatusDescription);
+                return m.pokemons.Select(p =>
+                {
+                    var sp = new Sprite();
+                    sp.Id = int.Parse(p.pokemon_id);
+                    sp.DeSpawn = int.Parse(p.despawn);
+                    sp.Lat = double.Parse(p.lat);
+                    sp.Lng = double.Parse(p.lng);
+                    return sp;
+                });
             }
-            var reader = new StreamReader(dataStream);
-            var responseFromServer = reader.ReadToEnd();
-            //Debug.WriteLine(responseFromServer);
-            dataStream?.Close();
-            response.Close();
-            #endregion
-            if (string.IsNullOrEmpty(responseFromServer))
-                return null;
-            var m = JsonConvert.DeserializeObject<Mons>(responseFromServer);
-            return m.pokemons.Select(p =>
+            catch (Exception ex)
             {
-                var sp = new Sprite();
-                sp.Id = int.Parse(p.pokemon_id);
-                sp.DeSpawn = int.Parse(p.despawn);
-                sp.Lat = double.Parse(p.lat);
-                sp.Lng = double.Parse(p.lng);
-                return sp;
-            });
+                Debug.WriteLine("Error: " + ex);
+                return new List<Sprite>();
+            }
         }
 
         public IEnumerable<Sprite> GetCurrentSprites(string since, IEnumerable<int> ids)
