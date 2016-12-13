@@ -36,7 +36,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>P.ico</ApplicationIcon>
+    <ApplicationIcon>snorlax.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
@@ -117,10 +117,11 @@
     <Compile Include="Main\Pginfos\SaveConfigForm.Designer.cs">
       <DependentUpon>SaveConfigForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Settings.cs" />
     <Compile Include="Utility\DatetimeUtility.cs" />
     <Compile Include="Utility\GeoUtility.cs" />
     <Compile Include="Utility\SpeechUtil.cs" />
-    <Compile Include="WebApi\DownloadData.cs" />
+    <Compile Include="WebApi\SgpkmApi.cs" />
     <Compile Include="WebApi\IModelSpawnInfo.cs" />
     <Compile Include="Main\FormMain.cs">
       <SubType>Form</SubType>
@@ -135,14 +136,13 @@
       <DependentUpon>FormStore.cs</DependentUpon>
     </Compile>
     <Compile Include="Main\IMain.cs" />
-    <Compile Include="Main\Pginfos\Pkm.cs" />
+    <Compile Include="Main\Pginfos\Sprite.cs" />
     <Compile Include="Main\Watcher\FormWatcher.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Main\Watcher\FormWatcher.Designer.cs">
       <DependentUpon>FormWatcher.cs</DependentUpon>
     </Compile>
-    <Compile Include="WebApi\NewApi.cs" />
     <Compile Include="Main\Stat\FormStatResult.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -203,7 +203,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="P.ico" />
+    <Content Include="snorlax.ico" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

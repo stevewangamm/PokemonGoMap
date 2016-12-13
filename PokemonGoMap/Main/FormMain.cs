@@ -34,8 +34,11 @@ namespace Pgmasst.Main
             {
                 var newForm = form();
                 newForm.StartPosition = FormStartPosition.CenterScreen;
+                this.Hide();
                 var task = Task.Factory.StartNew(newForm.ShowDialog);
                 task.Wait();
+                this.Focus();
+                this.Show();
             };
 
             if (this.tableLayoutPanelSubformCtrl.RowCount > 1)

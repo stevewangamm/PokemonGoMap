@@ -2,8 +2,38 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Pgmasst.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="Setting" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+    <Setting Name="HqIconsDirectory" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">D:\VS15Projects\github\PokemonGoMap\PokemonGoMap\bin\hq icons</Value>
+    </Setting>
+    <Setting Name="IconsDirectory" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">D:\VS15Projects\github\PokemonGoMap\PokemonGoMap\bin\icons</Value>
+    </Setting>
+    <Setting Name="WatchList" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">D:\VS15Projects\github\PokemonGoMap\PokemonGoMap\bin\watchlist.txt</Value>
+    </Setting>
+    <Setting Name="NotifiHighIv" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="NotifiDistance" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="FilterHighIv" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="IvThreshhold" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">80</Value>
+    </Setting>
+    <Setting Name="MapVisible" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="DistanceThreshhold" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">3</Value>
+    </Setting>
+    <Setting Name="QueryInterval" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="SettingName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">set20161205</Value>
     </Setting>
   </Settings>
 </SettingsFile>

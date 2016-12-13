@@ -32,16 +32,18 @@ namespace Pgmasst
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            Func<Form> statForm = ()=> new FormStatResult();
-            Func<Form> selForm = () => new SelectForm();
-            Func<Form> watcherForm = () => new FormWatcher();
+            //Func<Form> statForm = ()=> new FormStatResult();
+            //Func<Form> selForm = () => new SelectForm();
+            //Func<Form> watcherForm = () => new FormWatcher();
 
-            var mainForm = new FormMain();
-            mainForm.BindSubForms(statForm, "Stat");
-            mainForm.BindSubForms(selForm, "Show");
-            mainForm.BindSubForms(watcherForm, "Watcher");
+            //var mainForm = new FormMain();
+            //mainForm.BindSubForms(statForm, "Stat");
+            //mainForm.BindSubForms(selForm, "Show");
+            //mainForm.BindSubForms(watcherForm, "Watcher");
 
-            Application.Run(mainForm);
+            //Application.Run(mainForm);
+
+            Application.Run(new FormWatcher());
         }
     }
 }

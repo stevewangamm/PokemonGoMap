@@ -23,15 +23,126 @@ namespace Pgmasst.Properties {
             }
         }
         
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("D:\\VS15Projects\\github\\PokemonGoMap\\PokemonGoMap\\bin\\hq icons")]
+        public string HqIconsDirectory {
+            get {
+                return ((string)(this["HqIconsDirectory"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("D:\\VS15Projects\\github\\PokemonGoMap\\PokemonGoMap\\bin\\icons")]
+        public string IconsDirectory {
+            get {
+                return ((string)(this["IconsDirectory"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("D:\\VS15Projects\\github\\PokemonGoMap\\PokemonGoMap\\bin\\watchlist.txt")]
+        public string WatchList {
+            get {
+                return ((string)(this["WatchList"]));
+            }
+        }
+        
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string Setting {
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool NotifiHighIv {
             get {
-                return ((string)(this["Setting"]));
+                return ((bool)(this["NotifiHighIv"]));
             }
             set {
-                this["Setting"] = value;
+                this["NotifiHighIv"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool NotifiDistance {
+            get {
+                return ((bool)(this["NotifiDistance"]));
+            }
+            set {
+                this["NotifiDistance"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool FilterHighIv {
+            get {
+                return ((bool)(this["FilterHighIv"]));
+            }
+            set {
+                this["FilterHighIv"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("80")]
+        public int IvThreshhold {
+            get {
+                return ((int)(this["IvThreshhold"]));
+            }
+            set {
+                this["IvThreshhold"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool MapVisible {
+            get {
+                return ((bool)(this["MapVisible"]));
+            }
+            set {
+                this["MapVisible"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("3")]
+        public int DistanceThreshhold {
+            get {
+                return ((int)(this["DistanceThreshhold"]));
+            }
+            set {
+                this["DistanceThreshhold"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int QueryInterval {
+            get {
+                return ((int)(this["QueryInterval"]));
+            }
+            set {
+                this["QueryInterval"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("set20161205")]
+        public string SettingName {
+            get {
+                return ((string)(this["SettingName"]));
+            }
+            set {
+                this["SettingName"] = value;
             }
         }
     }

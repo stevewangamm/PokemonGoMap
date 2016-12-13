@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Pgmasst.Main.Pginfos;
 
-namespace Pgmasst.Api
+namespace Pgmasst.WebApi
 {
     public interface IModelSpawnInfo
     {

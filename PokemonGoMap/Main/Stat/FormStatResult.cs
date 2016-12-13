@@ -16,8 +16,8 @@ using GMap.NET.WindowsForms.Markers;
 using GMap.NET.WindowsForms.ToolTips;
 using GMapWinFormDemo;
 using Manina.Windows.Forms;
-using Pgmasst.Api;
 using Pgmasst.Main.Pginfos;
+using Pgmasst.WebApi;
 
 namespace PokemonGoMap
 {
